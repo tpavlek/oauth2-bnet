@@ -1,0 +1,25 @@
+{
+    "name": "depotwarehouse/oauth2-bnet",
+    "description": "A Battle.net provider for league/oauth2-client",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Troy Pavlek",
+            "email": "troy@depotwarehouse.net",
+            "homepage": "http://depotwarehouse.net",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Depotwarehouse\\OAuth2\\Client\\Provider\\": "src/"
+        }
+    },
+    "require": {
+        "league/oauth2-client": "~0.3"
+    },
+    "require-dev": {
+        "mockery/mockery": "0.9.*",
+        "phpunit/phpunit": "4.2.*"
+    }
+}
