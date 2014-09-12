@@ -16,6 +16,10 @@ class BattleNetTest extends PHPUnit_Framework_TestCase {
         ]);
     }
 
+    public function tearDown() {
+        Mockery::close();
+    }
+
     public function testAuthorizationUrl() {
         $url = $this->provider->getAuthorizationUrl();
         $uri = parse_url($url);
@@ -36,20 +40,23 @@ class BattleNetTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("https://us.battle.net/oauth/token", $url);
     }
 
-    public function testGetAccessToken() {
-        $response = Mockery::mock('\Guzzle\Http\Message\Response');
-        $response->shouldReceive('getBody')->once()->andReturn('access_token=mock_access_token&expires=3600&refresh_token=mock_refresh_token&uid=1')
+    public function testUserDetails() {
 
-    }
+        $token = new \League\OAuth2\Client\Token\AccessToken([
+            'uid' => 12345678,
+            'access_token' => "mock_access_token",
+            "refresh_token" => "mock_refresh_token",
+            "expires_in" => 3600
+        ]);
 
-    public function testFetchUserDetails() {
-        $mockClient = Mockery::mock('\Guzzle\Http\Client');
+        $response = [
+            'battletag' => 'testuser#1234'
+        ];
 
-        $provider = new \Depotwarehouse\OAuth2\Client\Provider\BattleNet();
+        $user = $this->provider->userDetails($response, $token);
 
-        $provider->setHttpClient($mockClient);
-
-        $mockClient->shouldReceive('setBaseUrl');
+        $this->assertAttributeEquals(12345678, 'uid', $user);
+        $this->assertAttributeEquals($response['battletag'], 'nickname', $user);
     }
 
 

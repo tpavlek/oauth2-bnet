@@ -12,7 +12,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Depotwarehouse\\OAuth2\\Client\\Provider\\": "src/"
+            "Depotwarehouse\\OAuth2\\Client\\": "src/"
         }
     },
     "require": {

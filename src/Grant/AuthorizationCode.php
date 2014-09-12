@@ -9,14 +9,17 @@
 namespace Depotwarehouse\OAuth2\Client\Grant;
 
 
-use Depotwarehouse\OAuth2\Client\Token\AccessToken;
+use League\OAuth2\Client\Token\AccessToken;
 
-class AuthorizationCode extends \League\OAuth2\Client\Grant\Authorizationcode {
+class AuthorizationCode extends \League\OAuth2\Client\Grant\AuthorizationCode {
 
 
     public function handleResponse($response = array())
     {
-        // We need to override this method because our access token is slightly different.
+        // We need to set the accountId as uid, to be compatible with the league oauth2 implementation.
+        if (isset($response['accountId']) and $response['accountId']) {
+            $response['uid'] = $response['accountId'];
+        }
         return new AccessToken($response);
     }
 }

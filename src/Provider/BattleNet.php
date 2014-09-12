@@ -31,16 +31,11 @@ class BattleNet extends IdentityProvider {
 
     public function urlUserDetails(AccessToken $token)
     {
-        return "https://us.api.battle.net/account/user/id?access_token=" . $token;
-    }
-
-    public function urlUserNickname(AccessToken $token) {
         return "https://us.api.battle.net/account/user/battletag?access_token=" . $token;
     }
 
     protected function fetchUserDetails(AccessToken $token)
     {
-        $response = [];
 
         try {
 
@@ -52,17 +47,9 @@ class BattleNet extends IdentityProvider {
             }
 
             $request = $client->get()->send();
-            $response = array_merge($response, (array)json_decode($request->getBody()));
 
-            $client = $this->getHttpClient();
-            $client->setBaseUrl($this->urlUserNickname($token));
+            $response = (array)json_decode($request->getBody());
 
-            if ($this->headers) {
-                $client->setDefaultOption('headers', $this->headers);
-            }
-
-            $request = $client->get()->send();
-            $response = array_merge($response, (array)json_decode($request->getBody()));
 
         } catch (BadResponseException $e) {
             // @codeCoverageIgnoreStart
@@ -80,8 +67,8 @@ class BattleNet extends IdentityProvider {
 
         $user = new User();
 
-        $user->uid = $response["id"];
-        $user->nickname = strstr($response["battletag"], '#', true);
+        $user->uid = $token->uid;
+        $user->nickname = $response["battletag"];
 
         return $user;
     }
