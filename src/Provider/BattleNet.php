@@ -31,7 +31,7 @@ class BattleNet extends IdentityProvider {
 
     public function urlUserDetails(AccessToken $token)
     {
-        return "https://us.api.battle.net/account/user/battletag?access_token=" . $token;
+        return "https://us.api.battle.net/sc2/profile/user?access_token=" . $token;
     }
 
     protected function fetchUserDetails(AccessToken $token)
@@ -61,14 +61,15 @@ class BattleNet extends IdentityProvider {
         return json_encode($response);
     }
 
+    /**
+     * @param $response
+     * @param AccessToken $token
+     * @return BattleNetUser
+     */
     public function userDetails($response, \League\OAuth2\Client\Token\AccessToken $token)
     {
-        $response = (array)$response;
-
-        $user = new User();
-
-        $user->uid = $token->uid;
-        $user->nickname = $response["battletag"];
+        $response = (array)($response->characters[0]);
+        $user = new BattleNetUser($response);
 
         return $user;
     }

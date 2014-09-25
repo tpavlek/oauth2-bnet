@@ -11,7 +11,7 @@ namespace Depotwarehouse\OAuth2\Client\Grant;
 
 use League\OAuth2\Client\Token\AccessToken;
 
-class AuthorizationCode extends \League\OAuth2\Client\Grant\AuthorizationCode {
+class AuthorizationCode extends \League\OAuth2\Client\Grant\Authorizationcode {
 
 
     public function handleResponse($response = array())
