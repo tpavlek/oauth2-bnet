@@ -12,6 +12,16 @@ class BattleNetUser {
     public $clan_tag;
     public $profile_url;
 
+    public $race;
+    public $league;
+    public $terran_wins;
+    public $protoss_wins;
+    public $zerg_wins;
+    public $season_total_games;
+
+    public $highest_league;
+    public $career_total_games;
+
 
     public function __construct(array $attributes) {
         $this->id = $attributes['id'];
@@ -21,6 +31,18 @@ class BattleNetUser {
         $this->clan_name = (isset($attributes['clanName'])) ? $attributes['clanName'] : null;
         $this->clan_tag = (isset($attributes['clanTag'])) ? $attributes['clanTag'] : null;
         $this->profile_url = "http://us.battle.net/sc2/en{$attributes['profilePath']}";
+
+        if (isset($attributes['career'])) {
+            $career = $attributes['career'];
+            $this->race = (isset($career['primaryRace'])) ? $career['primaryRace'] : null;
+            $this->league = (isset($career['league'])) ? $career['league'] : null;
+            $this->terran_wins = (isset($career['terranWins'])) ? $career['terranWins'] : null;
+            $this->protoss_wins = (isset($career['protossWins'])) ? $career['protossWins'] : null;
+            $this->zerg_wins = (isset($career['zergWins'])) ? $career['zergWins'] : null;
+            $this->highest_league = (isset($career['highest1v1Rank'])) ? $career['highest1v1Rank'] : null;
+            $this->season_total_games = (isset($career['seasonTotalGames'])) ? $career['seasonTotalGames'] : null;
+            $this->career_total_games = (isset($career['careerTotalGames'])) ? $career['careerTotalGames'] : null;
+        }
     }
 
     public function toArray() {
