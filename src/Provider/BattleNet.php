@@ -4,20 +4,20 @@ namespace Depotwarehouse\OAuth2\Client\Provider;
 
 use Guzzle\Http\Exception\BadResponseException;
 use League\OAuth2\Client\Exception\IDPException;
-use League\OAuth2\Client\Provider\IdentityProvider;
-use League\OAuth2\Client\Provider\User;
+use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Token\AccessToken;
 
-class BattleNet extends IdentityProvider {
+class BattleNet extends AbstractProvider {
 
     public function __construct(array $options = array()) {
         parent::__construct($options);
     }
 
     public $scopes = [
-        'wow.profile',
         'sc2.profile'
     ];
+
+    public $scopeSeparator = " ";
 
     public function urlAuthorize()
     {
@@ -48,8 +48,7 @@ class BattleNet extends IdentityProvider {
 
             $request = $client->get()->send();
 
-            $response = (array)json_decode($request->getBody());
-
+            $response = json_decode($request->getBody(), true);
 
         } catch (BadResponseException $e) {
             // @codeCoverageIgnoreStart

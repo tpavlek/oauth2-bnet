@@ -18,8 +18,8 @@ class BattleNetUser {
         $this->realm = $attributes['realm'];
         $this->name = $attributes['name'];
         $this->display_name = $attributes['displayName'];
-        $this->clan_name = $attributes['clanName'];
-        $this->clan_tag = $attributes['clanTag'];
+        $this->clan_name = (isset($attributes['clanName'])) ? $attributes['clanName'] : null;
+        $this->clan_tag = (isset($attributes['clanTag'])) ? $attributes['clanTag'] : null;
         $this->profile_url = "http://us.battle.net/sc2/en{$attributes['profilePath']}";
     }
 
