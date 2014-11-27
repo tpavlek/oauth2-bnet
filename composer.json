@@ -6,7 +6,7 @@
         {
             "name": "Troy Pavlek",
             "email": "troy@depotwarehouse.net",
-            "homepage": "http://depotwarehouse.net",
+            "homepage": "http://tpavlek.me",
             "role": "Developer"
         }
     ],
@@ -16,10 +16,14 @@
         }
     },
     "require": {
+        "php": ">=5.5.0",
         "league/oauth2-client": "~0.3"
     },
     "require-dev": {
         "mockery/mockery": "0.9.*",
         "phpunit/phpunit": "4.2.*"
+    },
+    "suggest": {
+        "illuminate/support": "Laravel integration"
     }
 }
