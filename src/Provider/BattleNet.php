@@ -12,6 +12,8 @@ class BattleNet extends AbstractProvider {
     public function __construct(array $options = array()) {
         parent::__construct($options);
     }
+    
+    public $uidKey = 'accountId';
 
     public $scopes = [
         'sc2.profile'
