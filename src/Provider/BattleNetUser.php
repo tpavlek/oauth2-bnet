@@ -33,7 +33,7 @@ class BattleNetUser {
         $this->profile_url = "http://us.battle.net/sc2/en{$attributes['profilePath']}";
 
         if (isset($attributes['career'])) {
-            $career = $attributes['career'];
+            $career = (is_object($attributes['career'])) ? (array)$attributes['career'] : $attributes['career'];
             $this->race = (isset($career['primaryRace'])) ? $career['primaryRace'] : null;
             $this->league = (isset($career['league'])) ? $career['league'] : null;
             $this->terran_wins = (isset($career['terranWins'])) ? $career['terranWins'] : null;
