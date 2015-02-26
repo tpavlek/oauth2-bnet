@@ -10,14 +10,6 @@ use Illuminate\Support\ServiceProvider;
 class BattleNetOAuth2ServiceProvider extends ServiceProvider
 {
 
-    /** @var  Repository */
-    protected $config;
-
-    public function __construct(Repository $config)
-    {
-        $this->config = $config;
-    }
-
     /**
      * Indicates if loading of the provider is deferred.
      *
@@ -31,13 +23,11 @@ class BattleNetOAuth2ServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $config = $this->config;
-
-        $this->app->bind(BattleNet::class, function () use ($config) {
+        $this->app->bind(BattleNet::class, function() {
             return new BattleNet([
-                'clientId' => $config->get('oauth2-bnet.clientId'),
-                'clientSecret' => $config->get('oauth2-bnet.clientSecret'),
-                'redirectUri' => $config->get('oauth2-bnet.redirectUri'),
+                'clientId' => \Config::get('oauth2-bnet.clientId'),
+                'clientSecret' => \Config::get('oauth2-bnet.clientSecret'),
+                'redirectUri' => \Config::get('oauth2-bnet.redirectUri'),
             ]);
         });
     }
@@ -47,5 +37,7 @@ class BattleNetOAuth2ServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/config/oauth2-bnet.php' => config_path('oauth2-bnet.php')
         ]);
+
+        $this->mergeConfigFrom(__DIR__ . '/config/oauth2-bnet.php', 'oauth2-bnet');
     }
 }
