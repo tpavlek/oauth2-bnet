@@ -4,9 +4,19 @@ namespace Depotwarehouse\OAuth2\Client\FrameworkIntegration\Laravel;
 
 
 use Depotwarehouse\OAuth2\Client\Provider\BattleNet;
+use Illuminate\Config\Repository;
 use Illuminate\Support\ServiceProvider;
 
-class BattleNetOAuth2ServiceProvider extends ServiceProvider {
+class BattleNetOAuth2ServiceProvider extends ServiceProvider
+{
+
+    /** @var  Repository */
+    protected $config;
+
+    public function __construct(Repository $config)
+    {
+        $this->config = $config;
+    }
 
     /**
      * Indicates if loading of the provider is deferred.
@@ -14,35 +24,28 @@ class BattleNetOAuth2ServiceProvider extends ServiceProvider {
      * @var bool
      */
     protected $defer = false;
+
     /**
      * Register the service provider.
      *
-     * @return void
      */
     public function register()
     {
-        $this->package('depotwarehouse/oauth2-bnet', null, __DIR__);
-        $this->app->bind(BattleNet::class, function () {
+        $config = $this->config;
+
+        $this->app->bind(BattleNet::class, function () use ($config) {
             return new BattleNet([
-                'clientId' => \Config::get('oauth2-bnet::clientId'),
-                'clientSecret' => \Config::get('oauth2-bnet::clientSecret'),
-                'redirectUri' => \Config::get('oauth2-bnet::redirectUri'),
+                'clientId' => $config->get('oauth2-bnet.clientId'),
+                'clientSecret' => $config->get('oauth2-bnet.clientSecret'),
+                'redirectUri' => $config->get('oauth2-bnet.redirectUri'),
             ]);
         });
     }
 
     public function boot()
     {
-
+        $this->publishes([
+            __DIR__ . '/config/oauth2-bnet.php' => config_path('oauth2-bnet.php')
+        ]);
     }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return array();
-    }
-} 
+}
