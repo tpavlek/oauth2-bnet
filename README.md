@@ -40,3 +40,17 @@ if (isset($_GET['code']) && $_GET['code']) {
     // $user->profile_url = [ Full URL to profile on battle.net ]
 }
 ```
+
+Testing
+--------
+
+There is a simple scaffold for an integration test in `test/`. Unfortunately, it is nontrivial to use, as
+the Battle.net OAuth service *requires* the use of `https` for all authentication traffic (but that does bode well for 
+security!)
+
+Included is an SSL certificate as well as a private key for use with the domain `oauth2-bnet.local`. Simply add `oauth2-bnet.local`
+to your `/etc/hosts` as an alias for localhost, and configure apache to serve the files in `test/` using the certificate
+and key files in `test/ssl`.
+
+Next edit `test/config.php` to fill in the values for your own client key from https://dev.battle.net and you should be able
+to run the test. The page should redirect you to log in, and then dump your user values to screen if successful.
