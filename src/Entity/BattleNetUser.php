@@ -1,8 +1,9 @@
 <?php
 
-namespace Depotwarehouse\OAuth2\Client\Provider;
+namespace Depotwarehouse\OAuth2\Client\Entity;
 
-class BattleNetUser {
+class BattleNetUser
+{
 
     public $id;
     public $realm;
@@ -23,7 +24,8 @@ class BattleNetUser {
     public $career_total_games;
 
 
-    public function __construct(array $attributes) {
+    public function __construct(array $attributes)
+    {
         $this->id = $attributes['id'];
         $this->realm = $attributes['realm'];
         $this->name = $attributes['name'];
@@ -45,7 +47,8 @@ class BattleNetUser {
         }
     }
 
-    public function toArray() {
+    public function toArray()
+    {
         return [
             'id' => $this->id,
             'realm' => $this->realm,

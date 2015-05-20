@@ -4,7 +4,6 @@ namespace Depotwarehouse\OAuth2\Client\FrameworkIntegration\Laravel;
 
 
 use Depotwarehouse\OAuth2\Client\Provider\BattleNet;
-use Illuminate\Config\Repository;
 use Illuminate\Support\ServiceProvider;
 
 class BattleNetOAuth2ServiceProvider extends ServiceProvider

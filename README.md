@@ -28,7 +28,7 @@ if (isset($_GET['code']) && $_GET['code']) {
         'code' => $_GET['code']
     ]);
 
-    // Returns an instance of Depotwarehouse\OAuth2\Client\Provider\BattleNetUser
+    // Returns an instance of Depotwarehouse\OAuth2\Client\Entity\BattleNetUser
     $user = $this->provider->getUserDetails($token);
 
     // $user->id = [ SC2 Account ID ]
