@@ -21,16 +21,6 @@ class BattleNet extends AbstractProvider
         return " ";
     }
 
-    /**
-     * @param $response
-     * @param AccessToken $token
-     * @return BattleNetUser
-     */
-    public function userDetails($response, \League\OAuth2\Client\Token\AccessToken $token)
-    {
-
-    }
-
     public function getBaseAuthorizationUrl()
     {
         return "https://us.battle.net/oauth/authorize";

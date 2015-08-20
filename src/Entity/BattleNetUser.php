@@ -2,7 +2,9 @@
 
 namespace Depotwarehouse\OAuth2\Client\Entity;
 
-class BattleNetUser
+use League\OAuth2\Client\Provider\ResourceOwnerInterface;
+
+class BattleNetUser implements ResourceOwnerInterface
 {
 
     public $id;
@@ -68,4 +70,8 @@ class BattleNetUser
         ];
     }
 
-} 
+    public function getId()
+    {
+        return $this->id;
+    }
+}

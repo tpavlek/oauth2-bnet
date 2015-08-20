@@ -29,7 +29,7 @@ if (isset($_GET['code']) && $_GET['code']) {
     ]);
 
     // Returns an instance of Depotwarehouse\OAuth2\Client\Entity\BattleNetUser
-    $user = $this->provider->getUserDetails($token);
+    $user = $this->provider->getResourceOwner($token);
 
     // $user->id = [ SC2 Account ID ]
     // $user->realm = [ Integer Account Realm ]
