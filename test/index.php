@@ -12,7 +12,7 @@ if (isset($_GET['code']) && $_GET['code']) {
         'code' => $_GET['code']
     ]);
 
-    $user = $provider->getUserDetails($token);
+    $user = $provider->getResourceOwner($token);
     var_dump($user);
 
 
