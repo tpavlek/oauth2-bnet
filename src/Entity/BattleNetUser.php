@@ -8,42 +8,42 @@ class BattleNetUser implements ResourceOwnerInterface
 {
 
     /**
-    * @var APIdata[]
+    * @var data[]
     * For WoW or SC2 API data
     */
 
-    public $APIdata = array();
+    public $data = array();
 
     public function __construct(array $attributes, $region)
     {
         // Detect if === SC2
         if (isset($attributes[0]['portrait'])){
 
-            $this->APIdata = $attributes;
+            $this->data = $attributes;
 
-            for ($i = 0; $i < count($this->APIdata); $i++) {
-                $this->APIdata[$i]['profile_url'] = "http://{$region}.battle.net/APIdata/en{$this->APIdata[$i]['profilePath']}";
+            for ($i = 0; $i < count($this->data); $i++) {
+                $this->data[$i]['profile_url'] = "http://{$region}.battle.net/data/en{$this->data[$i]['profilePath']}";
 
                 // Portrait URL links to a sheet of portraits, so we construct the proper one.
-                if (isset($this->APIdata[$i]['portrait'])) {
-                    $this->APIdata[$i]['portrait_url'] = substr($this->APIdata[$i]['portrait']->url, 0, strpos($this->APIdata[$i]['portrait']->url, '-'))
-                        . '-' . $this->APIdata[$i]['portrait']->offset . ".jpg";
+                if (isset($this->data[$i]['portrait'])) {
+                    $this->data[$i]['portrait_url'] = substr($this->data[$i]['portrait']->url, 0, strpos($this->data[$i]['portrait']->url, '-'))
+                        . '-' . $this->data[$i]['portrait']->offset . ".jpg";
                 }
             }
 
         }
         else{
-            $this->APIdata = $attributes;
+            $this->data = $attributes;
         }
     }
 
     public function toArray()
     {
-        return $this->APIdata;
+        return [$this->data];
     }
 
     public function getId()
     {
-        return $this->APIdata['id'];
+        return $this->data['id'];
     }
 }
