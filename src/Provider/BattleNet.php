@@ -14,6 +14,34 @@ use Psr\Http\Message\ResponseInterface;
 class BattleNet extends AbstractProvider
 {
 
+    protected $_ROD = array(
+        "region" => "us",
+        "game" => "sc2"
+    );
+
+    protected $_RODurl;
+
+    public function settings(array $params)
+    {
+        // Update any params defined
+        foreach ($params as $option => $value) {
+            if ($this->_ROD[$option]){
+                $this->_ROD[$option] = $value;
+            }
+        }
+
+        // Set final url
+        switch ($this->_ROD['game']) {
+            case 'wow':
+                $this->_RODurl = "https://{$this->_ROD['region']}.api.battle.net/wow/user/characters?access_token=";
+                break;
+            
+            default:
+                $this->_RODurl = "https://{$this->_ROD['region']}.api.battle.net/sc2/profile/user?access_token=";
+                break;
+        }
+    }
+
     const ACCESS_TOKEN_RESOURCE_OWNER_ID = 'accountId';
 
     protected function getScopeSeparator()
@@ -33,13 +61,13 @@ class BattleNet extends AbstractProvider
 
     public function getResourceOwnerDetailsUrl(AccessToken $token)
     {
-        return "https://us.api.battle.net/sc2/profile/user?access_token=" . $token;
+        return $this->_RODurl . $token;
     }
 
     protected function getDefaultScopes()
     {
         return [
-            'sc2.profile'
+            "{$this->_ROD['game']}.profile"
         ];
     }
 
@@ -53,8 +81,8 @@ class BattleNet extends AbstractProvider
 
     protected function createResourceOwner(array $response, AccessToken $token)
     {
-        $response = (array)($response['characters'][0]);
-        $user = new BattleNetUser($response);
+        $response = (array)($response['characters']);
+        $user = new BattleNetUser($response, $this->_ROD['region']);
 
         return $user;
     }

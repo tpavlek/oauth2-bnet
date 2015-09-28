@@ -7,13 +7,18 @@ $provider = new \Depotwarehouse\OAuth2\Client\Provider\BattleNet(
     $config
 );
 
+$provider->settings(array(
+	'region' => 'us', // Default = us
+	'game' => 'sc2' // Default = sc2
+));
+
 if (isset($_GET['code']) && $_GET['code']) {
     $token = $provider->getAccessToken("authorization_code", [
         'code' => $_GET['code']
     ]);
 
     $user = $provider->getResourceOwner($token);
-    var_dump($user);
+    echo '<pre>' . var_export($user, true) . '</pre>';
 
 
 } else {
