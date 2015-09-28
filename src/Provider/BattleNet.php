@@ -19,7 +19,7 @@ class BattleNet extends AbstractProvider
         "game" => "sc2"
     );
 
-    protected $_RODurl;
+    protected $_RODurl = "https://us.api.battle.net/sc2/profile/user?access_token=";
 
     public function settings(array $params)
     {
