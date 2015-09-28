@@ -12,7 +12,7 @@ class BattleNetUser implements ResourceOwnerInterface
     * For WoW or SC2 API data
     */
 
-    public $data = array();
+    public $data;
 
     public function __construct(array $attributes, $region)
     {
@@ -39,11 +39,11 @@ class BattleNetUser implements ResourceOwnerInterface
 
     public function toArray()
     {
-        return [$this->data];
+        return $this->data;
     }
 
     public function getId()
     {
-        return $this->data['id'];
+        return $this->data[0]['id'];
     }
 }
