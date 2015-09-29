@@ -3,14 +3,10 @@
 require '../vendor/autoload.php';
 require 'config.php';
 
-$provider = new \Depotwarehouse\OAuth2\Client\Provider\BattleNet(
+$provider = new \Depotwarehouse\OAuth2\Client\Provider\SC2Provider(
     $config
 );
 
-$provider->settings(array(
-	'region' => 'us', // Default = us
-	'game' => 'sc2' // Default = sc2
-));
 
 if (isset($_GET['code']) && $_GET['code']) {
     $token = $provider->getAccessToken("authorization_code", [

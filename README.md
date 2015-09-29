@@ -4,7 +4,8 @@ This is a package to integrate Battle.net authentication with the OAuth2 client 
 [The League of Extraordinary Packages](https://github.com/thephpleague/oauth2-client).
 
 Currently integrated with OAuth to pull profiles from SC2 & WoW. If Diablo players submit
-a PR, I'd be happy to merge in changes and be inclusive :)
+a PR, I'd be happy to merge in changes and be inclusive :) Thanks to [@TheJaydox](https://github.com/TheJaydox)
+for submitting a WoW pull!
 
 To install, use composer:
 
@@ -12,32 +13,39 @@ To install, use composer:
 composer require depotwarehouse/oauth2-bnet
 ```
 
-Usage is the same as the league's OAuth client (Region:US & Game:SC2 as defaults), using `\Depotwarehouse\OAuth2\Client\Provider\BattleNet` as the provider.
+Usage is the same as the league's OAuth client, using `\Depotwarehouse\OAuth2\Client\Provider\SC2Provider` or
+`\Depotwarehouse\OAuth2\Client\Provider\WowProvider` as the provider.
 For example:
 
 ```php
-$provider = new \Depotwarehouse\OAuth2\Client\Provider\BattleNet([
+$provider = new \Depotwarehouse\OAuth2\Client\Provider\SC2Provider([
     'clientId' => "YOUR_CLIENT_ID",
     'clientSecret' => "YOUR_CLIENT_SECRET",
-    'redirectUri' => "http://your-redirect-uri"
+    'redirectUri' => "http://your-redirect-uri",
+    'region' => 'eu'
 ]);
+```
+As you can see you may pass an optional 'region' argument to the constructor, and it will then query on that region
+instead. If you omit the region argument, then it will default to the `us` region.
 
-// If looking to change from defaults
-$provider->settings(array(
-	'region' => 'us', // Default = us
-	'game' => 'sc2' // Default = sc2
-));
-
+```php
 if (isset($_GET['code']) && $_GET['code']) {
     $token = $this->provider->getAccessToken("authorizaton_code", [
         'code' => $_GET['code']
     ]);
 
-    // Returns an instance of Depotwarehouse\OAuth2\Client\Entity\BattleNetUser
+    // Returns an instance of Depotwarehouse\OAuth2\Client\Entity\SC2User
     $user = $this->provider->getResourceOwner($token);
-
-    // $user->data[#]['key'];
 ```
+
+To get to know the data available on an `SC2User` simply inspect the public properties of the class, as they show all the
+available data that has been returned.
+
+Alternatively, for WoW you can use `\Depotwarehouse\OAuth2\Client\Provider\WowProvider` and it will return an object of
+type `WowUser`. A `WowUser` simply contains a public `$data` property with an array of character objects as `stdClass`s.
+
+There's an example JSON representation below, but I suggest you use inspection to figure out more closely what you're
+looking for (and maybe send a pull request with the properties you find!)
 
 Example output (converted to JSON for display):
 ```json

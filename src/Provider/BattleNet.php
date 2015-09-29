@@ -3,6 +3,8 @@
 namespace Depotwarehouse\OAuth2\Client\Provider;
 
 use Depotwarehouse\OAuth2\Client\Entity\BattleNetUser;
+use Depotwarehouse\OAuth2\Client\Entity\SC2User;
+use Depotwarehouse\OAuth2\Client\Entity\WowUser;
 use Guzzle\Http\Exception\BadResponseException;
 use League\OAuth2\Client\Exception\IDPException;
 use League\OAuth2\Client\Provider\AbstractProvider;
@@ -11,38 +13,52 @@ use League\OAuth2\Client\Provider\ResourceOwnerInterface;
 use League\OAuth2\Client\Token\AccessToken;
 use Psr\Http\Message\ResponseInterface;
 
-class BattleNet extends AbstractProvider
+abstract class BattleNet extends AbstractProvider
 {
 
-    protected $_ROD = array(
-        "region" => "us",
-        "game" => "sc2"
-    );
+    /**
+     * The game we wish to query. Defaults to SC2. Available options are:
+     *  * sc2
+     *  * wow
+     * @var string
+     */
+    protected $game;
 
-    protected $_RODurl = "https://us.api.battle.net/sc2/profile/user?access_token=";
+    /**
+     * The Battle.net region we wish to query on. Available options are:
+     *  * us
+     *  * eu
+     *  * kr
+     *  * tw
+     *  * cn
+     *  * sea (sc2-only!)
+     *
+     * @var string
+     */
+    protected $region = "us";
 
-    public function settings(array $params)
+    const ACCESS_TOKEN_RESOURCE_OWNER_ID = 'accountId';
+
+    public function __construct(array $options = [ ], array $collaborators = [ ])
     {
-        // Update any params defined
-        foreach ($params as $option => $value) {
-            if ($this->_ROD[$option]){
-                $this->_ROD[$option] = $value;
-            }
+        parent::__construct($options, $collaborators);
+
+        // We need to validate some data to make sure we haven't constructed in an illegal state.
+        if (!in_array($this->game, [ "sc2", "wow"])) {
+            throw new \InvalidArgumentException("Game must be either sc2 or wow, given: {$this->game}");
         }
 
-        // Set final url
-        switch ($this->_ROD['game']) {
-            case 'wow':
-                $this->_RODurl = "https://{$this->_ROD['region']}.api.battle.net/wow/user/characters?access_token=";
-                break;
-            
-            default:
-                $this->_RODurl = "https://{$this->_ROD['region']}.api.battle.net/sc2/profile/user?access_token=";
-                break;
+        $availableRegions = [ "us", "eu", "kr", "tw", "cn", "sea" ];
+        if (!in_array($this->region, $availableRegions)) {
+            $regionList = implode(", ", $availableRegions);
+            throw new \InvalidArgumentException("Region must be one of: {$regionList}, given: {$this->region}");
+        }
+
+        if ($this->region == "sea" && $this->game != "sc2") {
+            throw new \InvalidArgumentException("sea region is only available for sc2");
         }
     }
 
-    const ACCESS_TOKEN_RESOURCE_OWNER_ID = 'accountId';
 
     protected function getScopeSeparator()
     {
@@ -59,15 +75,10 @@ class BattleNet extends AbstractProvider
         return "https://us.battle.net/oauth/token";
     }
 
-    public function getResourceOwnerDetailsUrl(AccessToken $token)
-    {
-        return $this->_RODurl . $token;
-    }
-
     protected function getDefaultScopes()
     {
         return [
-            "{$this->_ROD['game']}.profile"
+            "{$this->game}.profile"
         ];
     }
 
@@ -77,13 +88,5 @@ class BattleNet extends AbstractProvider
             $data = json_decode($data, true);
             throw new IdentityProviderException($data['message'], $response->getStatusCode(), $data);
         }
-    }
-
-    protected function createResourceOwner(array $response, AccessToken $token)
-    {
-        $response = (array)($response['characters']);
-        $user = new BattleNetUser($response, $this->_ROD['region']);
-
-        return $user;
     }
 }

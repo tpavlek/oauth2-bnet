@@ -4,6 +4,8 @@ namespace Depotwarehouse\OAuth2\Client\FrameworkIntegration\Laravel;
 
 
 use Depotwarehouse\OAuth2\Client\Provider\BattleNet;
+use Depotwarehouse\OAuth2\Client\Provider\SC2Provider;
+use Depotwarehouse\OAuth2\Client\Provider\WowProvider;
 use Illuminate\Support\ServiceProvider;
 
 class BattleNetOAuth2ServiceProvider extends ServiceProvider
@@ -22,8 +24,16 @@ class BattleNetOAuth2ServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(BattleNet::class, function() {
-            return new BattleNet([
+        $this->app->bind(SC2Provider::class, function() {
+            return new SC2Provider([
+                'clientId' => \Config::get('oauth2-bnet.clientId'),
+                'clientSecret' => \Config::get('oauth2-bnet.clientSecret'),
+                'redirectUri' => \Config::get('oauth2-bnet.redirectUri'),
+            ]);
+        });
+
+        $this->app->bind(WowProvider::class, function() {
+            return new WowProvider([
                 'clientId' => \Config::get('oauth2-bnet.clientId'),
                 'clientSecret' => \Config::get('oauth2-bnet.clientSecret'),
                 'redirectUri' => \Config::get('oauth2-bnet.redirectUri'),
