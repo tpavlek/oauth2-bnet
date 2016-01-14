@@ -38,6 +38,9 @@ abstract class BattleNet extends AbstractProvider
     protected $region = "us";
 
     const ACCESS_TOKEN_RESOURCE_OWNER_ID = 'accountId';
+    
+    const AUTH_URL = 'https://%s.battle.net/oauth/authorize';
+    const TOKEN_URL = 'https://%s.battle.net/oauth/token';
 
     public function __construct(array $options = [ ], array $collaborators = [ ])
     {
@@ -67,12 +70,12 @@ abstract class BattleNet extends AbstractProvider
 
     public function getBaseAuthorizationUrl()
     {
-        return "https://us.battle.net/oauth/authorize";
+        return sprintf(self::AUTH_URL, $this->region);
     }
 
     public function getBaseAccessTokenUrl(array $params)
     {
-        return "https://us.battle.net/oauth/token";
+        return sprintf(self::TOKEN_URL, $this->region);
     }
 
     protected function getDefaultScopes()
