@@ -75,7 +75,7 @@ abstract class BattleNet extends AbstractProvider
 
     public function getBaseAccessTokenUrl(array $params)
     {
-        return sprintf(self::AUTH_TOKEN, $this->region);
+        return sprintf(self::TOKEN_URL, $this->region);
     }
 
     protected function getDefaultScopes()
