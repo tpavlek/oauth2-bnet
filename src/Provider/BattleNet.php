@@ -67,12 +67,12 @@ abstract class BattleNet extends AbstractProvider
 
     public function getBaseAuthorizationUrl()
     {
-        return "https://us.battle.net/oauth/authorize";
+        return "https://{$this->region}.battle.net/oauth/authorize";
     }
 
     public function getBaseAccessTokenUrl(array $params)
     {
-        return "https://us.battle.net/oauth/token";
+        return "https://{$this->region}.battle.net/oauth/token";
     }
 
     protected function getDefaultScopes()
