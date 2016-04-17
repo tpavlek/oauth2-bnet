@@ -85,8 +85,8 @@ abstract class BattleNet extends AbstractProvider
     protected function checkResponse(ResponseInterface $response, $data)
     {
         if ($response->getStatusCode() != 200) {
-            $data = json_decode($data, true);
-            throw new IdentityProviderException($data['message'], $response->getStatusCode(), $data);
+            $data = (is_array($data)) ? $data : json_decode($data, true);
+            throw new IdentityProviderException($data['error_description'], $response->getStatusCode(), $data);
         }
     }
 }
