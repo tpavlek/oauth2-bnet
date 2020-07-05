@@ -30,7 +30,7 @@ instead. If you omit the region argument, then it will default to the `us` regio
 
 ```php
 if (isset($_GET['code']) && $_GET['code']) {
-    $token = $this->provider->getAccessToken("authorizaton_code", [
+    $token = $this->provider->getAccessToken("authorization_code", [
         'code' => $_GET['code']
     ]);
 
